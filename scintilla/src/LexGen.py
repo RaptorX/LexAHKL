@@ -294,13 +294,7 @@ def UpdateVersionNumbers(root):
     UpdateLineInFile(root + "scintilla/qt/ScintillaEdit/ScintillaEdit.pro",
         "VERSION =", 
         "VERSION = " + versionDotted)
-    UpdateLineInFile(root + "scintilla/doc/ScintillaDownload.html", "       Release", 
-        "       Release " + versionDotted)
-    UpdateDownloadLinks(root + "scintilla/doc/ScintillaDownload.html", version)
-    UpdateLineInFile(root + "scintilla/doc/index.html",
-        '          <font color="#FFCC99" size="3"> Release version', 
-        '          <font color="#FFCC99" size="3"> Release version ' + versionDotted + '<br />') 
-
+    
     if os.path.exists(root + "scite"):
         UpdateLineInFile(root + "scite/src/SciTE.h", "#define VERSION_SCITE", 
             "#define VERSION_SCITE \"" + versionDotted + "\"")

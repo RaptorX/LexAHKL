@@ -13,6 +13,56 @@ Legend:
     $ Disable
 ==================
 
+LexAHKL v0.2
+Date: Thu Apr 18 15:10:04 2013 +0200
+
+    Changes:
+
+    + Add Identifiers
+       . Add WorListSet function
+       . Add Directives
+       . Add Commands
+       . Add Parameters
+       . Add Control Flow
+       . Add Built-in Functions
+       . Add Built-in Variables
+       . Add Keys
+       . Add User Defined
+       . Add Command extra conditions to separate them from Parameters
+
+    - Remove unused variables
+
+    * Change LexGen script to not access deleted files
+    * Change help files with LexGen and HFace scripts
+    * Change makefile to clean ../bin folder
+    * Change makefile to disable warnings
+
+    ! Fix switch case duplicates
+
+    ^ Update Test Script
+
+    [C] Test Lexing of Directives
+    [C] Test Lexing of Commands
+    [C] Test Lexing of Parameters
+    [C] Test Lexing of Control Flow
+    [C] Test Lexing of Functions
+    [C] Test Lexing of Built-in Variables
+    [C] Test Lexing of Keys
+    [C] Test Lexing of User Defined keywords
+
+    Todo:
+
+    + Add Comments
+    + Add Strings
+    + Add Labels
+    + Add Hotkeys
+    + Add Hotstrings
+    + Add Numbers
+    + Add Variables
+    + Add Objects
+    + Add Functions
+    + Add Expressions
+
 LexAHKL v0.1
 Date: Thu Apr 18 14:23:36 2013 +0200
 
