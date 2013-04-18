@@ -232,15 +232,47 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 						sc.ChangeState(SCE_AHKL_KEY);
 
 					} else if (user1.InList(identifier)) {
-						
+
 						sc.ChangeState(SCE_AHKL_USERDEFINED1);
-						
+
 					} else if (user2.InList(identifier)) {
-						
+
 						sc.ChangeState(SCE_AHKL_USERDEFINED2);
-						
+
 					}
 
+					sc.SetState(SCE_AHKL_NEUTRAL);
+
+				}
+			break;
+			}
+
+			case SCE_AHKL_COMMENTDOC:	{
+				if (OnlySpaces && sc.Match('*','/')){
+
+					inCommentBlk = false;
+					sc.Forward(2);
+					sc.SetState(SCE_AHKL_NEUTRAL);
+
+				} else if ((OnlySpaces || isspace(sc.chPrev)) && sc.Match('@')) {
+
+					sc.SetState(SCE_AHKL_COMMENTKEYWORD);
+
+				}
+			break;
+			}
+
+			case SCE_AHKL_COMMENTKEYWORD:	{
+				if (sc.Match(':'))
+					sc.ForwardSetState(SCE_AHKL_COMMENTDOC);
+			break;
+			}
+
+			case SCE_AHKL_COMMENTBLOCK:	{
+				if (OnlySpaces && sc.Match('*','/')){
+
+					inCommentBlk = false;
+					sc.Forward(2);
 					sc.SetState(SCE_AHKL_NEUTRAL);
 
 				}
@@ -252,14 +284,36 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 		// Enter New State
 		if (sc.state == SCE_AHKL_NEUTRAL) {
 
-			if (!sc.atLineEnd && valIdentifier.Contains(sc.ch))
+			if (!sc.atLineEnd && valIdentifier.Contains(sc.ch)) {
+			
 				sc.SetState(SCE_AHKL_IDENTIFIER);
-			else if (sc.ch == ')')
+				
+			} else if (sc.ch == ')') {
+			
 				inCommand = false;
-			else if (sc.ch == '{')
+				
+			} else if (sc.ch == '{') {
+				
 				inKey = true;
-			else if (sc.ch == '}')
+				
+			} else if (sc.ch == '}') {
+			
 				inKey = false;
+
+			} else if ((OnlySpaces || isspace(sc.chPrev)) && sc.Match(';')) {
+
+				sc.SetState(SCE_AHKL_COMMENTLINE);
+
+			} else if (OnlySpaces && sc.Match('/', '*')) {
+
+				inCommentBlk = true;
+				sc.ChangeState(SCE_AHKL_COMMENTBLOCK);
+
+				if (sc.Match("/**") && !sc.Match("/***"))
+					sc.ChangeState(SCE_AHKL_COMMENTDOC);
+
+			}
+
 
 		}
 

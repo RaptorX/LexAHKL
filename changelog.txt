@@ -13,6 +13,27 @@ Legend:
     $ Disable
 ==================
 
+LexAHKL v0.3
+Date: Fri Apr 19 01:50:18 2013 +0200
+
+    Changes:
+
+    + Add Comments
+
+    [C] Test Lexing of Comments
+
+    Todo:
+
+    + Add Strings
+    + Add Labels
+    + Add Hotkeys
+    + Add Hotstrings
+    + Add Numbers
+    + Add Variables
+    + Add Objects
+    + Add Functions
+    + Add Expressions
+
 LexAHKL v0.2
 Date: Thu Apr 18 15:10:04 2013 +0200
 
@@ -83,7 +104,3 @@ Date: Thu Apr 18 14:23:36 2013 +0200
     + Add Objects
     + Add Functions
     + Add Identifiers
-
-Initial Commit
-Date: Thu Apr 18 13:41:45 2013 +0200
-
