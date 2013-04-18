@@ -1,0 +1,39 @@
+Versioning:
+    Main.Feature.Changes.Bugs
+
+Legend:
+==================
+    + Add
+    - Remove
+    ! Fix
+    * Change
+    ^ Update
+    % Test
+    & Enable
+    $ Disable
+==================
+
+LexAHKL v0.1
+Date: Thu Apr 18 14:23:36 2013 +0200
+
+    Changes:
+
+    + Add non lexical state variables
+    + Add per line state reset
+
+    Todo:
+
+    + Add Comments
+    + Add Strings
+    + Add Labels
+    + Add Hotkeys
+    + Add Hotstrings
+    + Add Numbers
+    + Add Variables
+    + Add Objects
+    + Add Functions
+    + Add Identifiers
+
+Initial Commit
+Date: Thu Apr 18 13:41:45 2013 +0200
+

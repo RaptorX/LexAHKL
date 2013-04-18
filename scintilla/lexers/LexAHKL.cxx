@@ -46,8 +46,33 @@ static const char *const ahklWordLists[] = {
 
 class LexerAHKL : public ILexer {
 
+	CharacterSet valLabel;
+	CharacterSet valIdentifier;
+	CharacterSet valHotstringOpt;
+
+	WordList directives;
+	WordList commands;
+	WordList parameters;
+	WordList flow;
+	WordList functions;
+	WordList variables;
+	WordList keys;
+	WordList user1;
+	WordList user2;
+
+	CharacterSet ExpOperator;
+	CharacterSet SynOperator;
+	CharacterSet EscSequence;
+	
 public:
-	LexerAHKL(){}
+	LexerAHKL() :
+	valIdentifier(CharacterSet::setAlphaNum, "@#$_"),
+	valLabel(CharacterSet::setAlphaNum, "@#$_~!^&*()+[]\';./\\<>?|{}-=\""),
+	valHotstringOpt(CharacterSet::setDigits, "*?BbCcEeIiKkOoPpRrSsZz"),
+	ExpOperator(CharacterSet::setNone, "+-*/!~&|^<>.:"),
+	SynOperator(ExpOperator, "()[]?,{}"),
+	EscSequence(CharacterSet::setNone, ",%`;nrbtvaf"){
+	}
 
 	virtual ~LexerAHKL() {
 	}
@@ -94,14 +119,37 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 	LexAccessor styler(pAccess);
 	StyleContext sc(startPos, length, initStyle, styler);
 
+	// non-lexical states
+	bool OnlySpaces;
+	bool hasAlpha;
+	
+	bool inCommand;
+	bool inHotstring;
+	bool inExpression;
+	bool inStringBlk = (sc.state == SCE_AHKL_STRINGOPTS || sc.state == SCE_AHKL_STRINGBLOCK || sc.state == SCE_AHKL_STRINGCOMMENT);
+	bool inCommentBlk = (sc.state == SCE_AHKL_COMMENTDOC || sc.state == SCE_AHKL_COMMENTBLOCK);
+	
 	for (; sc.More(); sc.Forward()){
 
+		// AutoHotkey usually resets lexical state in a per line base except in Comment and String Blocks
+		if (sc.atLineStart) {
+			OnlySpaces = true, hasAlpha = false, validLabel = true, validIdentifier = true,
+			inCommand = false, inHotstring = false, inExpression = false;
+
+			if (!inStringBlk && !inCommentBlk)
+				sc.SetState(SCE_AHKL_NEUTRAL);
+		}
+		
 		// Exit Current State
 		switch (sc.state) {}
 
 		// Enter New State
 		if (sc.state == SCE_AHKL_NEUTRAL) {}
 
+		if (!isspace(sc.ch))
+			OnlySpaces = false;
+		else
+			hasAlpha = false;								// Make sure we clear the alpha flag for later decimal numbers
 	}
 
 	sc.Complete();
