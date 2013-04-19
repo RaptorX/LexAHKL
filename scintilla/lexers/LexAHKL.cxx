@@ -13,6 +13,7 @@
 #include <string>
 #include <sstream>
 
+#include <windows.h>
 #include <vector>
 #include <map>
 
@@ -170,6 +171,9 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 	StyleContext sc(startPos, length, initStyle, styler);
 
 	// non-lexical states
+	int expLevel = 0;
+	int mainState = SCE_AHKL_NEUTRAL;								// Used on some special cases like objects where SCE_AHKL_NEUTRAL is set but
+													// we basically come from SCE_AHKL_OBJECT and we need to be aware of it
 	bool OnlySpaces;
 
 	bool inKey;
@@ -187,6 +191,9 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 		// AutoHotkey usually resets lexical state in a per line base except in Comment and String Blocks
 		if (sc.atLineStart) {
 
+			expLevel = 0;
+			mainState = SCE_AHKL_NEUTRAL;
+
 			OnlySpaces = true, inKey = false, inCommand = false, inHotstring = false,
 			inExpression = false, inExpString = false;
 
@@ -195,7 +202,8 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 		}
 
-		if (!inStringBlk && !inCommentBlk && (OnlySpaces || isspace(sc.chPrev)) && sc.Match(';'))
+		// Comments are allowed almost everywhere
+		if (!inStringBlk && !inCommentBlk && (OnlySpaces || isspace(sc.chPrev)) && sc.ch == ';')
 			sc.SetState(SCE_AHKL_COMMENTLINE);
 
 		// Exit Current State
@@ -245,10 +253,53 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 						sc.ChangeState(SCE_AHKL_USERDEFINED2);
 
-					} else if (inExpression && !(sc.ch == '(' || sc.ch == '[')) {	// dont lex as a variable if it is a function or an array
+					} else if (inExpression && !(sc.ch == '(' || sc.ch == '[' || sc.ch == '.')) {	// Dont lex as a variable if it is a function or an array
 
 						sc.ChangeState(SCE_AHKL_VAR);
 						sc.SetState(SCE_AHKL_NEUTRAL);
+
+					} else if (!inCommand && (sc.ch == '[' || sc.ch == '.')) {
+
+						if (sc.ch == '.' && valIdentifier.Contains(sc.chNext)) {
+
+							mainState = SCE_AHKL_OBJECT;
+
+							sc.ChangeState(SCE_AHKL_OBJECT);
+							sc.SetState(SCE_AHKL_NEUTRAL);
+
+						} else if (sc.ch == '.' && !valIdentifier.Contains(sc.chNext)) {
+
+							sc.ChangeState(SCE_AHKL_ERROR);
+							sc.SetState(SCE_AHKL_ERROR);
+							break;
+
+						} else if (sc.ch == '[') {
+
+							sc.ChangeState(SCE_AHKL_OBJECT);
+							sc.SetState(SCE_AHKL_NEUTRAL);
+
+						}
+
+					} else if (sc.ch == '(') {
+
+						sc.ChangeState(SCE_AHKL_USERFUNCTION);
+						sc.SetState(SCE_AHKL_NEUTRAL);
+
+					} else if (mainState == SCE_AHKL_OBJECT) {			// Special object case
+
+						mainState == SCE_AHKL_NEUTRAL;
+
+						if (sc.ch == '(') {
+
+							sc.ChangeState(SCE_AHKL_USERFUNCTION);
+							sc.SetState(SCE_AHKL_NEUTRAL);
+
+						} else	{
+
+							sc.ChangeState(SCE_AHKL_VAR);
+							sc.SetState(SCE_AHKL_NEUTRAL);
+
+						}
 
 					}
 
@@ -271,7 +322,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 					sc.Forward(2);
 					sc.SetState(SCE_AHKL_NEUTRAL);
 
-				} else if ((OnlySpaces || isspace(sc.chPrev)) && sc.Match('@')) {
+				} else if ((OnlySpaces || isspace(sc.chPrev)) && sc.ch == '@') {
 
 					sc.SetState(SCE_AHKL_COMMENTKEYWORD);
 
@@ -280,7 +331,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			}
 
 			case SCE_AHKL_COMMENTKEYWORD:	{
-				if (sc.Match(':'))
+				if (sc.ch == ':')
 					sc.ForwardSetState(SCE_AHKL_COMMENTDOC);
 			break;
 			}
@@ -307,7 +358,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			case SCE_AHKL_DECNUMBER:	{
 				if (!isdigit(sc.ch)) {
 
-					if (sc.Match('x') || sc.Match('X'))
+					if (sc.ch == 'x' || sc.ch == 'X')
 						sc.ChangeState(SCE_AHKL_HEXNUMBER);
 					else if (isalpha(sc.ch))
 						sc.ChangeState(SCE_AHKL_IDENTIFIER);
@@ -345,14 +396,14 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			break;
 			}
 
-			case SCE_AHKL_STRINGOPTS:		{
+			case SCE_AHKL_STRINGOPTS:	{
 				if (sc.atLineEnd)
 					sc.SetState(SCE_AHKL_STRINGBLOCK);
 			break;
 			}
 
-			case SCE_AHKL_STRINGBLOCK:		{
-				if (OnlySpaces && sc.Match(')')) {
+			case SCE_AHKL_STRINGBLOCK:	{
+				if (OnlySpaces && sc.ch == ')') {
 
 					inStringBlk = false;
 					sc.SetState(SCE_AHKL_NEUTRAL);
@@ -369,12 +420,12 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			break;
 			}
 
-			case SCE_AHKL_ESCAPESEQ:		{
+			case SCE_AHKL_ESCAPESEQ:	{
 				sc.ForwardSetState(SCE_AHKL_NEUTRAL);
 			break;
 			}
 
-			case SCE_AHKL_VAR:			{
+			case SCE_AHKL_VAR:		{
 				if (!valIdentifier.Contains(sc.ch) && sc.ch != '%') {
 
 					sc.ChangeState(SCE_AHKL_ERROR);
@@ -385,11 +436,10 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 					sc.ForwardSetState(SCE_AHKL_STRING);
 
 				}
-
 			break;
 			}
 
-			case SCE_AHKL_VARREF:			{
+			case SCE_AHKL_VARREF:		{
 				if (!valIdentifier.Contains(sc.ch) && sc.ch != '%')
 					sc.ChangeState(SCE_AHKL_ERROR);
 				else if (sc.ch == '%')
@@ -398,12 +448,48 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			break;
 			}
 
-			case SCE_AHKL_ERROR:		{
-				if (inExpression && inExpString && sc.ch == '"')
-					sc.ChangeState(SCE_AHKL_STRING);
-				else if (sc.ch == '%')
-					sc.SetState(SCE_AHKL_NEUTRAL);
+			case SCE_AHKL_HOTSTRINGOPT:		{
+				if (sc.ch == ':') {
 
+					sc.ForwardSetState(SCE_AHKL_HOTSTRING);
+
+				} else if (!valHotstringOpt.Contains(sc.ch)) {
+
+					sc.SetState(SCE_AHKL_ERROR);
+
+				}
+			break;
+			}
+			
+			case SCE_AHKL_HOTSTRING:		{
+				if (sc.Match(':',':')) {
+
+					sc.SetState(SCE_AHKL_HOTSTRINGOPT);
+					sc.Forward(2);
+					sc.SetState(SCE_AHKL_STRING);
+
+				}
+			break;
+			}
+			case SCE_AHKL_ERROR:		{
+				if (inExpression && inExpString && sc.ch == '"') {
+				
+					sc.ChangeState(SCE_AHKL_STRING);
+				
+				} else if (sc.ch == '%') {
+				
+					sc.SetState(SCE_AHKL_NEUTRAL);
+					
+				} else if (inHotstring && valHotstringOpt.Contains(sc.ch)) {
+
+					sc.SetState(SCE_AHKL_HOTSTRINGOPT);
+
+				} else if (inHotstring && sc.Match(':')) {
+
+					sc.SetState(SCE_AHKL_HOTSTRINGOPT);
+					sc.ForwardSetState(SCE_AHKL_HOTSTRING);
+
+				}
 			break;
 			}
 		}
@@ -415,12 +501,16 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			if ((OnlySpaces && sc.ch == '.') || sc.ch == '(' || sc.ch == '[' || sc.ch == '?' || sc.Match(" % ")
 			||   ExpOperator.Contains(sc.ch) && sc.chNext == '=') {
 
+				if (sc.ch == '(' || sc.ch == '[')
+					expLevel += 1;
+
 				inExpression = true;
 
 			} else if (sc.ch == ']' || sc.ch == ')') {
 
-				inExpression = false;
-
+				expLevel -= 1;
+				if (expLevel == 0)
+					inExpression = false;
 			}
 
 			if (!sc.atLineEnd && valIdentifier.Contains(sc.ch)) {
@@ -438,6 +528,10 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 				if (sc.Match("/**") && !sc.Match("/***"))
 					sc.ChangeState(SCE_AHKL_COMMENTDOC);
+
+			} else if (sc.ch == ']') {
+
+				mainState == SCE_AHKL_NEUTRAL;						// Reset object state
 
 			} else if (sc.ch == ')') {
 
@@ -464,7 +558,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 				sc.ForwardSetState(SCE_AHKL_STRING);
 
-			} else if (OnlySpaces && sc.Match('(')) {
+			} else if (OnlySpaces && sc.ch == '(') {
 
 				inStringBlk = true;
 				sc.ForwardSetState(SCE_AHKL_STRINGOPTS);
@@ -476,6 +570,11 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			} else if (inExpression && sc.ch == '%' && valIdentifier.Contains(sc.chNext)) {
 
 				sc.ForwardSetState(SCE_AHKL_VARREF);
+
+			} else if (OnlySpaces && sc.ch == ':') {
+
+				inHotstring = true;
+				sc.SetState(SCE_AHKL_HOTSTRINGOPT);
 
 			}
 

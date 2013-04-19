@@ -84,12 +84,13 @@
  */ `, `% `` `; `n `r `b `t `v `a `f `s `i `]
 
 /**
- * @Variables, Strings and Expressions:
+ * @Variables, Strings, Functions and Expressions:
  *
  */ literal = this is a literal string
 
     var = %variable% and literal text
-    var := variable %var_reference%
+    var := variable %var_reference% function()
+    var += array["test"] myvar[12] obj.property obj.Method()
     
     msgbox %myvar%
     msgbox % "this is a forced expression so: " var " and " %varref% "will work as shown above"
@@ -101,9 +102,12 @@
 	 
     var4 ? true : "false"
 
+    Function(byref param1, param2.hwnd, param3.method(), 4, "text 5")
 
-    array["test"], var[12]
-    object.property, object.Method()
+    var[12] := var + 5 func("Test")
+    sci["new"] = test
+    sci.add()
+    sci.status = 1
 
     if var = text
 

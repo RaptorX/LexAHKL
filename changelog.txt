@@ -13,6 +13,32 @@ Legend:
     $ Disable
 ==================
 
+LexAHKL v0.7
+Date: Fri Apr 19 23:24:09 2013 +0200
+
+    Changes:
+
+    + Add Objects
+    + Add Functions
+    + Add Hotstrings
+    + Add Expression Levels
+
+    ^ Update Test Script
+
+    Todo:
+
+    + Add Labels
+    + Add Hotkeys
+
+    ! Fix quotation marks outside expression not lexed as a string
+    ! Fix lexing filenames as objects
+
+    Notes:
+
+      The expression levels are used to have quotation marks within expression not break when
+     nesting functions, e.g. func(func2(), "text"). In the last example the second function
+     should not end the expression yet to allow the string to be lexed correctly.
+
 LexAHKL v0.6
 Date: Fri Apr 19 14:31:53 2013 +0200
 
@@ -54,26 +80,3 @@ Date: Fri Apr 19 11:01:49 2013 +0200
     + Add Objects
     + Add Functions
     + Add Escape Sequences
-
-LexAHKL v0.4
-Date: Fri Apr 19 02:14:27 2013 +0200
-
-    Changes:
-
-    + Add Numbers
-    + Add Basic Expression handler code
-
-    ^ Update Test Script
-
-    [C] Test Lexing of Numbers
-
-    Todo:
-
-    + Add Strings
-    + Add Labels
-    + Add Hotkeys
-    + Add Hotstrings
-    + Add Variables
-    + Add Objects
-    + Add Functions
-    + Add Expressions
