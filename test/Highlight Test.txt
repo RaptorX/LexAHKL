@@ -33,7 +33,7 @@
  * but they will be highlighted correctly when typing options.
  *
  */ 0 1 2 3 4 5 6 7 8 9
-    var1 var2 x10 y10
+    0var var1 v4r2 x10 y10
     gui, add, edit, x10 y20 w100 h200
 
 /**
