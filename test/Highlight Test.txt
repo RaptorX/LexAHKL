@@ -8,7 +8,7 @@
  * @Homepage         : http://www.autohotkey.com/board/topic/85928-wrapper-scintilla-wrapper-v1424/
  *
  * @Creation Date    : October 29, 2012
- * @Modification Date: April 18, 2013
+ * @Modification Date: April 19, 2013
  *
  * @Description      :
  * -------------------
@@ -17,11 +17,15 @@
  * because they are useful and dont interfere with the script I added them.
  *
  * One such examples is the @[keyword]: secuence in which any word preceded by an [At] Symbol
- * and Followed by a [colon] symbol inside a comment block will be highlighted. Useful when adding
- * titles as shown above.
- *
+ * and Followed by a [colon] symbol inside a documentation comment block will be highlighted. 
+ * Useful when adding titles as shown above.
  * =============================================================================================== *
  */
+ 
+ /*
+  * This is a normal comment block
+  * it works as usual
+  */
 
 ; this is a group of line comments
 ; if 3 or more line commnents are together
@@ -38,7 +42,7 @@
 
 /**
  * @Hex Numbers:
- * If not valid hex the whole string goes back to default.
+ * If the hex number is invalid the string goes back to default and is treated as a variable name.
  * If option is enabled you can have a different color every 4 digits for easy read.
  * The exeption is when having 6 digits. Only one color is used regardless of the above option.
  *
@@ -46,13 +50,13 @@
 
 /**
  * @Labels:
- * It enters Error state after a label cause nothing else is allowed after it except for comments.
+ * It enters Error state after a label because nothing else is allowed after it except for comments.
  * Almost anything is valid as a Label identifier but keep it simple and clear!
  *
  */ ValidLabel:
     Valid~!@#$^&*()_+;[]\'./<>?|{}-=":
     another_valid_label: there cant be anything else in this line ; exept for comments
-    inva``lid:
+    inva`lid:
     not,valid:
     no space allowed:
 
@@ -75,7 +79,7 @@
 
 /**
  * @Escape Sequences:
- * Only those characters that have a special meaning will be highlighted.
+ * Only characters that have a special meaning will be highlighted as an escape sequence.
  *
  */ `, `% `` `; `n `r `b `t `v `a `f `s `i `]
 
@@ -84,23 +88,26 @@
  *
  */ literal = this is a literal string
 
-    var = %variable% and text
+    var = %variable% and literal text
     var := variable %var_reference%
+    
     msgbox %myvar%
-    msgbox % "this is a forced expression in a command so: " var " and " %varref% "work as above"
+    msgbox % "this is a forced expression so: " var " and " %varref% "will work as shown above"
 
     var1 := {one : "test"}
-    exp2 := "this is an expression" var + var2 + 10 + 5 func(1, 2, "this is text", "and 5+5 = 10")
+    exp2 := "this is an expression" var + var2 + 10 + 5 func(1, 2, "this is text", "and this 2")
     exp3 .= this is also "an xpression"
+	 . "this as well" var %varref%
+	 
     var4 ? true : "false"
 
 
-    var["test"], var[12]
+    array["test"], var[12]
     object.property, object.Method()
 
     if var = text
 
-    if (var = "text")
+    if (myvar = "remember that this is an expression here" %varref% 5+5)
 
     var =
     (
@@ -123,13 +130,16 @@
 
 
 /**
+ * =============================================================================================== *
  * @Keywords:
- * This is a comprehensive list of all they keywords handled by the lexer at the moment
- * I recommend setting the commands and the special parameters to the same color to avoid
- * some parameters being highlighted as commands because both use the same keyword.
  *
- * I will fix that at some point. For now just keep them the same color and you will be fine.
- *
+ * This is a comprehensive list of all they keywords handled by the test script at the moment.
+ * The lexer does not contain hard coded keywords. That means that it is up to your program to 
+ * pass them to the lexer.
+ * 
+ * For an example of how to do this see the source code of the script provided in the forum post
+ * found at the top of the text.
+ * =============================================================================================== *
  */
 
 /**
@@ -345,7 +355,7 @@ fileencoding
 /**
  * @Command Parameters:
  * These guys only highlight after a Command or Function.
- * Later on I will make them be command specific e.g. Msgbox wont highlight "ahk_id" because
+ * Later on I will make them to be command specific e.g. Msgbox wont highlight "ahk_id" because
  * it doesnt take it, but for now they would highlight after any of the mentioned above.
  *
  * @Note:

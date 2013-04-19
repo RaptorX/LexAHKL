@@ -13,6 +13,24 @@ Legend:
     $ Disable
 ==================
 
+LexAHKL v0.6
+Date: Fri Apr 19 14:31:53 2013 +0200
+
+    Changes:
+
+    + Add Variables
+    + Add Escape Sequences
+
+    ^ Update Test Script
+
+    Todo:
+
+    + Add Labels
+    + Add Hotkeys
+    + Add Hotstrings
+    + Add Objects
+    + Add Functions
+
 LexAHKL v0.5
 Date: Fri Apr 19 11:01:49 2013 +0200
 
@@ -35,6 +53,7 @@ Date: Fri Apr 19 11:01:49 2013 +0200
     + Add Variables
     + Add Objects
     + Add Functions
+    + Add Escape Sequences
 
 LexAHKL v0.4
 Date: Fri Apr 19 02:14:27 2013 +0200
@@ -54,27 +73,6 @@ Date: Fri Apr 19 02:14:27 2013 +0200
     + Add Labels
     + Add Hotkeys
     + Add Hotstrings
-    + Add Variables
-    + Add Objects
-    + Add Functions
-    + Add Expressions
-
-LexAHKL v0.3
-Date: Fri Apr 19 01:50:18 2013 +0200
-
-    Changes:
-
-    + Add Comments
-
-    [C] Test Lexing of Comments
-
-    Todo:
-
-    + Add Strings
-    + Add Labels
-    + Add Hotkeys
-    + Add Hotstrings
-    + Add Numbers
     + Add Variables
     + Add Objects
     + Add Functions
