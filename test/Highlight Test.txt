@@ -1,6 +1,5 @@
 /**
- * For normal Comment Blocks remove second star here at the top or add more than 2 stars.
- *
+ * For normal Comment Blocks remove second asterisk here at the top or add more than 2 asterisks.
  * =============================================================================================== *
  * @Author           : RaptorX   <graptorx@gmail.com>
  * @Script Name      : Autohotkey Highlight Test
@@ -8,7 +7,7 @@
  * @Homepage         : http://www.autohotkey.com/board/topic/85928-wrapper-scintilla-wrapper-v1424/
  *
  * @Creation Date    : October 29, 2012
- * @Modification Date: April 19, 2013
+ * @Modification Date: April 21, 2013
  *
  * @Description      :
  * -------------------
@@ -22,15 +21,35 @@
  * =============================================================================================== *
  */
  
- /*
-  * This is a normal comment block
-  * it works as usual
-  */
+; this is a line comment
 
-; this is a group of line comments
-; if 3 or more line commnents are together
-; it should be foldable
+	; empty spaces dont matter
 
+/**
+ *
+ * This is a Documentation Comment.
+ * They work exactly the same as the normal comment block but you can use @keywords: here.
+ *
+ * To create a Documentation Comment you have to put exactly 2 asterisks at the top.
+ *
+ */
+
+/*
+ *
+ * This is a normal comment block
+ * it works as usual.
+ *
+ * @keywords: wont work here.
+ * 
+ * Comment blocks only close when the closing tag is in its own line
+ * so this part */ will continue coloring as comment block
+ *
+ */
+ 
+/***
+ * This is also a normal comment block because there are more than 2 asterisks at the top
+ */
+ 
 /**
  * @Decimal Numbers:
  * Variable names will not highlight numbers
@@ -53,35 +72,16 @@
  * It enters Error state after a label because nothing else is allowed after it except for comments.
  * Almost anything is valid as a Label identifier but keep it simple and clear!
  *
+ * @Note:
+ * Due to technical difficulties even though the characters (, [ and . are recognized by autohotkey
+ * as valid label characters the lexer wont lex them correctly. 
+ *
  */ ValidLabel:
-    Valid~!@#$^&*()_+;[]\'./<>?|{}-=":
+    Valid~!@#$^&*)_+;]\'/<>?|{}-=":
     another_valid_label: there cant be anything else in this line ; exept for comments
     inva`lid:
     not,valid:
     no space allowed:
-
-
-/**
- * @Hotkeys:
- *
- */ ^Enter::Send test
-    #Backspace::Msgbox True
-    !+NumpadEnter::var += var
-    ~$a::Msgbox % test + 5
-
-/**
- * @Hotstrings:
- *
- */ ::btw::by the way
-    :*?B0C1K5OP5RSISPSEZ:options::these are all acceptable options
-    :ADFG:invOptions::these are invalid options
-    :RAk5FeSIG*:MixOptions::and here is how it looks with some mixed options
-
-/**
- * @Escape Sequences:
- * Only characters that have a special meaning will be highlighted as an escape sequence.
- *
- */ `, `% `` `; `n `r `b `t `v `a `f `s `i `]
 
 /**
  * @Variables, Strings, Functions and Expressions:
@@ -131,6 +131,29 @@
 	and this percent sign %variable% is not a variable reference anymore!!
 
     ), c:\this is allowed.txt
+
+/**
+ * @Hotkeys:
+ *
+ */ ^Enter::Send test
+    #Backspace::Msgbox True
+    !+NumpadEnter::var += var
+    ~$a::Msgbox % test + 5
+
+/**
+ * @Hotstrings:
+ *
+ */ ::btw::by the way
+    :*?B0C1K5OP5RSISPSEZ:options::these are all acceptable options
+    :ADFG:invOptions::these are invalid options
+    :RAk5FeSIG*:MixOptions::and here is how it looks with some mixed options
+
+/**
+ * @Escape Sequences:
+ * Only characters that have a special meaning will be highlighted as an escape sequence.
+ *
+ */ `, `% `` `; `n `r `b `t `v `a `f `s `i `]
+
 
 
 /**
@@ -468,3 +491,41 @@ true false
 {browser_stop} {browser_search} {browser_favorites} {browser_home} {volume_mute} {volume_down}
 {volume_up} {media_next} {media_prev} {media_stop} {media_play_pause} {launch_mail} {launch_media}
 {launch_app1} {launch_app2} {blind} {click} {raw} {wheelleft} {wheelright}
+
+/**
+ * =============================================================================================== *
+ * @Folding:
+ *
+ * The following part is for testing folding.
+ * =============================================================================================== *
+ */
+ 
+; this is a group of line comments
+; if 3 or more line commnents are together
+; it should be foldable
+
+/*
+comment blocks 
+should fold
+*/
+
+/**
+this should 
+fold as well
+*/
+
+
+if (true) {
+	; this should fold
+} else {
+	; this too
+}
+ 
+var =
+(
+	continuation sections
+	should be able to fold as well
+)
+ 
+ 
+ 

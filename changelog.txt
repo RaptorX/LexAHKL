@@ -13,6 +13,26 @@ Legend:
     $ Disable
 ==================
 
+LexAHKL v0.8
+Date: Sat Apr 20 17:14:07 2013 +0200
+
+    Changes:
+
+    + Add Labels
+    + Add Hotkeys
+
+    ! Fix Expressions
+
+    ^ Update Test Script
+    ^ Update README
+
+    Todo:
+
+    + Add Folding
+
+    ! Fix quotation marks outside expression not lexed as a string
+    ! Fix lexing filenames as objects
+
 LexAHKL v0.7
 Date: Fri Apr 19 23:24:09 2013 +0200
 
@@ -56,27 +76,3 @@ Date: Fri Apr 19 14:31:53 2013 +0200
     + Add Hotstrings
     + Add Objects
     + Add Functions
-
-LexAHKL v0.5
-Date: Fri Apr 19 11:01:49 2013 +0200
-
-    Changes:
-
-    + Add Expressions
-    + Add Strings
-
-    - Remove binary files from repository
-
-    * Change minor formatting
-
-    ^ Update Test Script
-
-    Todo:
-
-    + Add Labels
-    + Add Hotkeys
-    + Add Hotstrings
-    + Add Variables
-    + Add Objects
-    + Add Functions
-    + Add Escape Sequences
