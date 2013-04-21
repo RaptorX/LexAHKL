@@ -180,6 +180,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 	bool validLabel;
 
 	bool inKey;
+	bool inString;
 	bool inCommand;
 	bool inHotstring;
 	bool inExpression;
@@ -197,8 +198,8 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			expLevel = 0;
 			mainState = SCE_AHKL_NEUTRAL;
 
-			OnlySpaces = true, validLabel = true, inKey = false, inCommand = false,
-			inHotstring = false, inExpression = false, inExpString = false;
+			OnlySpaces = true, validLabel = true, inKey = false, inString = false;
+			inCommand = false, inHotstring = false, inExpression = false, inExpString = false;
 
 			if (!inStringBlk && !inCommentBlk)
 				sc.SetState(SCE_AHKL_NEUTRAL);
@@ -256,9 +257,20 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 						sc.ChangeState(SCE_AHKL_USERDEFINED2);
 
+					} else if (sc.ch == '{') {
+
+						inKey = true;
+
 					} else if (inExpression && !(sc.ch == '(' || sc.ch == '[' || sc.ch == '.')) {	// Dont lex as a variable if it is a function or an array
 
 						sc.ChangeState(SCE_AHKL_VAR);
+
+					} else if (!inExpression && !ExpOperator.Contains(sc.chPrev) && sc.ch == '=') {
+
+						inString = true;
+						sc.ForwardSetState(SCE_AHKL_STRING);
+
+						continue;
 
 					} else if (valLabel.Contains(sc.ch) && !(sc.ch == '(' || sc.ch == '[' || sc.ch == '.')) {
 
@@ -312,7 +324,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 						sc.ChangeState(SCE_AHKL_IDENTIFIER);
 
-					} else if (sc.ch == ':' && sc.chNext != ':' && sc.chNext != '/' && sc.chNext != '\\') {
+					} else if (sc.ch == ':' && sc.chNext != ':' && sc.chNext != '/' && sc.chNext != '\\' && sc.chNext != '=') {
 
 						sc.ChangeState(SCE_AHKL_LABEL);
 						sc.ForwardSetState(SCE_AHKL_ERROR);
@@ -377,6 +389,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			case SCE_AHKL_HEXNUMBER:	{
 				if (isspace(sc.ch) || SynOperator.Contains(sc.ch))
 					sc.SetState(SCE_AHKL_NEUTRAL);
+
 				else if (!isxdigit(sc.ch))
 					sc.ChangeState(SCE_AHKL_IDENTIFIER);
 			break;
@@ -387,8 +400,10 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 					if (sc.ch == 'x' || sc.ch == 'X')
 						sc.ChangeState(SCE_AHKL_HEXNUMBER);
+
 					else if (isalpha(sc.ch))
 						sc.ChangeState(SCE_AHKL_IDENTIFIER);
+
 					else
 						sc.SetState(SCE_AHKL_NEUTRAL);
 
@@ -462,17 +477,25 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 				} else if (sc.ch == '%') {
 
 					sc.SetState(SCE_AHKL_NEUTRAL);
-					sc.ForwardSetState(SCE_AHKL_STRING);
+
+					if (inString )
+						sc.ForwardSetState(SCE_AHKL_STRING);
 
 				}
 			break;
 			}
 
 			case SCE_AHKL_VARREF:		{
-				if (!valIdentifier.Contains(sc.ch) && sc.ch != '%')
+				if (!valIdentifier.Contains(sc.ch) && sc.ch != '%') {
+
 					sc.ChangeState(SCE_AHKL_ERROR);
-				else if (sc.ch == '%')
+
+				} else if (sc.ch == '%') {
+
 					sc.SetState(SCE_AHKL_NEUTRAL);
+					continue;
+
+				}
 
 			break;
 			}
@@ -553,6 +576,9 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 				if (isdigit(sc.ch))
 					sc.SetState(SCE_AHKL_DECNUMBER);
 
+				else if (inCommand && sc.ch == '+')
+					continue;
+
 				else
 					sc.SetState(SCE_AHKL_IDENTIFIER);
 
@@ -586,11 +612,12 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 			} else if (inExpression && sc.ch == '"') {
 
-				inExpString = true;
+				inExpString = true; inString = false;
 				sc.SetState(SCE_AHKL_STRING);
 
 			} else if (!inExpression && !ExpOperator.Contains(sc.chPrev) && sc.ch == '=') {
 
+				inString = true;
 				sc.ForwardSetState(SCE_AHKL_STRING);
 
 			} else if (OnlySpaces && sc.ch == '(') {
