@@ -437,6 +437,8 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 					if (sc.chNext != ',')
 						sc.ForwardSetState(SCE_AHKL_ERROR);
+					else
+						inCommand = true;
 				}
 
 				// if ((OnlySpaces || isspace(sc.chPrev)) && sc.Match(';')) {
@@ -568,7 +570,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 			} else if (sc.ch == ')') {
 
-				inCommand = false;
+				// inCommand = false;
 
 			} else if (sc.ch == '{') {
 

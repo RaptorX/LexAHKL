@@ -514,7 +514,6 @@ this should
 fold as well
 */
 
-
 if (true) {
 	; this should fold
 } else {

@@ -13,6 +13,21 @@ Legend:
     $ Disable
 ==================
 
+LexAHKL v0.8.1
+Date: Mon Apr 22 00:19:52 2013 +0200
+
+    Changes:
+
+    ! Fix lexing filenames as objects while inside commands
+
+    ^ Update Test Script
+
+    Todo:
+
+    + Add Folding
+
+    ! Fix quotation marks outside expression not lexed as a string
+
 LexAHKL v0.8
 Date: Sat Apr 20 17:14:07 2013 +0200
 
@@ -58,21 +73,3 @@ Date: Fri Apr 19 23:24:09 2013 +0200
       The expression levels are used to have quotation marks within expression not break when
      nesting functions, e.g. func(func2(), "text"). In the last example the second function
      should not end the expression yet to allow the string to be lexed correctly.
-
-LexAHKL v0.6
-Date: Fri Apr 19 14:31:53 2013 +0200
-
-    Changes:
-
-    + Add Variables
-    + Add Escape Sequences
-
-    ^ Update Test Script
-
-    Todo:
-
-    + Add Labels
-    + Add Hotkeys
-    + Add Hotstrings
-    + Add Objects
-    + Add Functions
