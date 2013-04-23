@@ -259,7 +259,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 					} else if (sc.ch == '{') {
 
-						inKey = true;
+						inKey = true; inCommand = false;
 
 					} else if (inExpression && !(sc.ch == '(' || sc.ch == '[' || sc.ch == '.')) {	// Dont lex as a variable if it is a function or an array
 
@@ -611,7 +611,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 			} else if (sc.ch == '{') {
 
-				inKey = true;
+				inKey = true; inCommand = false;
 
 			} else if (sc.ch == '}') {
 
