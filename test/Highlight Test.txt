@@ -102,6 +102,8 @@
 	 . "this as well" var %varref%
 
     var4 ? true : "false"
+    
+    dynamic_%var%_name := "this is a dynamic variable name " %ref%_name
 
     Function(byref param1, param2.hwnd, param3.method(), 4, "text 5")
 

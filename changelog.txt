@@ -1,5 +1,5 @@
 Versioning:
-     Major.Minor.Fix/Changes-Build
+     Major.Minor.Fix-Build
 
  Legend:
 ==================
@@ -9,6 +9,26 @@ Versioning:
     * Change
     ^ Update
 ==================
+
+LexAHKL v0.8.4-13
+Date: Tue Apr 23 20:51:07 2013 +0200
+
+    Changes:
+
+    ! Fix Variable entering to error
+
+    Todo:
+
+    + Add Folding
+    + Add Strings to comment doc
+    + Add Line States and context sensitivity
+
+    ! Fix Expression Levels
+    ! Fix Comma continuation section continues with command
+    ! Fix inKey should end command
+    ! Fix Expressions should end commands
+    ! Fix Close parenthesis should end command
+    ! Fix Validate identifiers for functions
 
 LexAHKL v0.8.3-12
 Date: Tue Apr 23 13:43:40 2013 +0200
@@ -28,7 +48,7 @@ Date: Tue Apr 23 13:43:40 2013 +0200
     ! Fix Comma continuation section continues with command
     ! Fix inKey should end command
     ! Fix Expressions should end commands
-    ! Fix Close should parenthesis end command
+    ! Fix Close parenthesis should end command
     ! Fix Validate identifiers for functions
 
 LexAHKL v0.8.2
@@ -50,18 +70,3 @@ Date: Mon Apr 22 01:25:52 2013 +0200
     + Line States and context sensitivity
 
     ! Fix assignment not entering to string
-
-LexAHKL v0.8.1
-Date: Mon Apr 22 00:19:52 2013 +0200
-
-    Changes:
-
-    ! Fix lexing filenames as objects while inside commands
-
-    ^ Update Test Script
-
-    Todo:
-
-    + Add Folding
-
-    ! Fix quotation marks outside expression not lexed as a string

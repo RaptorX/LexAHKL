@@ -481,6 +481,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 				} else if (sc.ch == '%') {
 
 					sc.SetState(SCE_AHKL_NEUTRAL);
+					sc.ForwardSetState(SCE_AHKL_NEUTRAL);
 
 					if (inString )
 						sc.ForwardSetState(SCE_AHKL_STRING);
