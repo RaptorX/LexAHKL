@@ -272,6 +272,10 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 						continue;
 
+					} else if (!inCommand && ExpOperator.Contains(sc.ch) && sc.chNext == '=') {
+
+						sc.SetState(SCE_AHKL_ERROR);
+
 					} else if (valLabel.Contains(sc.ch) && !(sc.ch == '(' || sc.ch == '[' || sc.ch == '.')) {
 
 						continue;
@@ -324,7 +328,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 						sc.ChangeState(SCE_AHKL_IDENTIFIER);
 
-					} else if (sc.ch == ':' && sc.chNext != ':' && sc.chNext != '/' && sc.chNext != '\\' && sc.chNext != '=') {
+					} else if (sc.ch == ':' && sc.chNext != ':' && sc.chNext != '/' && sc.chNext != '\\') {
 
 						sc.ChangeState(SCE_AHKL_LABEL);
 						sc.ForwardSetState(SCE_AHKL_ERROR);

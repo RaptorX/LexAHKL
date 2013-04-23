@@ -1,17 +1,55 @@
 Versioning:
-    Main.Feature.Changes.Bugs
+     Major.Minor.Fix/Changes-Build
 
-Legend:
+ Legend:
 ==================
     + Add
     - Remove
     ! Fix
     * Change
     ^ Update
-    % Test
-    & Enable
-    $ Disable
 ==================
+
+LexAHKL v0.8.3-12
+Date: Tue Apr 23 13:43:40 2013 +0200
+
+    Changes:
+
+    ! Fix Expression assignment
+
+    Todo:
+
+    + Add Folding
+    + Add Strings to comment doc
+    + Add Line States and context sensitivity
+
+    ! Fix Expression Levels
+    ! Fix Variable entering to error
+    ! Fix Comma continuation section continues with command
+    ! Fix inKey should end command
+    ! Fix Expressions should end commands
+    ! Fix Close should parenthesis end command
+    ! Fix Validate identifiers for functions
+
+LexAHKL v0.8.2
+Date: Mon Apr 22 01:25:52 2013 +0200
+
+    Changes:
+
+    ! Fix Keys not being lexed if no space before braces
+    ! Fix inKey boolean preventing Labels to work correctly
+    ! Fix Assignment treated as Label
+    ! Fix Variable entering String even when not in a string
+    ! Fix Variable Reference entering error state after being closed
+    ! Fix Keys not being lexed if no space before braces
+    ! Fix Command parameters not working with + and -
+
+    Todo:
+
+    + Add Folding
+    + Line States and context sensitivity
+
+    ! Fix assignment not entering to string
 
 LexAHKL v0.8.1
 Date: Mon Apr 22 00:19:52 2013 +0200
@@ -27,49 +65,3 @@ Date: Mon Apr 22 00:19:52 2013 +0200
     + Add Folding
 
     ! Fix quotation marks outside expression not lexed as a string
-
-LexAHKL v0.8
-Date: Sat Apr 20 17:14:07 2013 +0200
-
-    Changes:
-
-    + Add Labels
-    + Add Hotkeys
-
-    ! Fix Expressions
-
-    ^ Update Test Script
-    ^ Update README
-
-    Todo:
-
-    + Add Folding
-
-    ! Fix quotation marks outside expression not lexed as a string
-    ! Fix lexing filenames as objects
-
-LexAHKL v0.7
-Date: Fri Apr 19 23:24:09 2013 +0200
-
-    Changes:
-
-    + Add Objects
-    + Add Functions
-    + Add Hotstrings
-    + Add Expression Levels
-
-    ^ Update Test Script
-
-    Todo:
-
-    + Add Labels
-    + Add Hotkeys
-
-    ! Fix quotation marks outside expression not lexed as a string
-    ! Fix lexing filenames as objects
-
-    Notes:
-
-      The expression levels are used to have quotation marks within expression not break when
-     nesting functions, e.g. func(func2(), "text"). In the last example the second function
-     should not end the expression yet to allow the string to be lexed correctly.
