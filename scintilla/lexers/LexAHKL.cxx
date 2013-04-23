@@ -557,15 +557,12 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 		if (sc.state == SCE_AHKL_NEUTRAL) {
 
 			// Handle Expressions
-			if ((OnlySpaces && sc.ch == '.')  || sc.Match(" % ")
-			|| ((valIdentifier.Contains(sc.chPrev) || isspace(sc.chPrev)) && sc.ch == '(')
+			if ((OnlySpaces && sc.ch == '.')  || sc.Match(" % ") || (sc.ch == '(')
 			|| ((valIdentifier.Contains(sc.chPrev) || isspace(sc.chPrev)) && sc.ch == '?')
 			|| ((valIdentifier.Contains(sc.chPrev) || isspace(sc.chPrev)) && ExpOperator.Contains(sc.ch) && sc.chNext == '=')
 			||  (valIdentifier.Contains(sc.chPrev) && sc.ch == '[')) {
 
-				if (sc.ch == '(' || sc.ch == '[')
-					expLevel += 1;
-
+				expLevel += 1;
 				inExpression = true;
 
 			} else if (sc.ch == ']' || sc.ch == ')') {
