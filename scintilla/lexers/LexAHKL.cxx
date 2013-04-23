@@ -178,6 +178,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 													// we basically come from SCE_AHKL_OBJECT and we need to be aware of it
 	bool OnlySpaces;
 	bool validLabel;
+	bool validFunction;
 
 	bool inKey;
 	bool inString;
@@ -198,7 +199,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			expLevel = 0;
 			mainState = SCE_AHKL_NEUTRAL;
 
-			OnlySpaces = true, validLabel = true, inKey = false, inString = false;
+			OnlySpaces = true, validLabel = true, validFunction = true, inKey = false, inString = false;
 			inCommand = false, inHotstring = false, inExpression = false, inExpString = false;
 
 			if (!inStringBlk && !inCommentBlk)
@@ -218,6 +219,9 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 					char identifier[256];
 					sc.GetCurrentLowered(identifier, sizeof(identifier));
+
+					if (!sc.Match('('))
+						validFunction = false;
 
 					if (directives.InList(identifier)) {
 
@@ -276,6 +280,11 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 						sc.SetState(SCE_AHKL_ERROR);
 
+					} else if (validFunction && sc.ch == '(') {
+
+						sc.ChangeState(SCE_AHKL_USERFUNCTION);
+						sc.SetState(SCE_AHKL_NEUTRAL);
+
 					} else if (valLabel.Contains(sc.ch) && !(sc.ch == '(' || sc.ch == '[' || sc.ch == '.')) {
 
 						continue;
@@ -302,11 +311,6 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 							sc.SetState(SCE_AHKL_NEUTRAL);
 
 						}
-
-					} else if (sc.ch == '(') {
-
-						sc.ChangeState(SCE_AHKL_USERFUNCTION);
-						sc.SetState(SCE_AHKL_NEUTRAL);
 
 					} else if (mainState == SCE_AHKL_OBJECT) {			// Special object case
 
@@ -564,7 +568,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 				expLevel += 1;
 				inExpression = true;
-				
+
 				if (sc.Match(" % "))
 					inCommand = false;
 
@@ -581,8 +585,11 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			if ((OnlySpaces && sc.ch == ',') || (OnlySpaces && sc.Match(')', ',')))
 				inCommand = true;
 
-			if (!sc.atLineEnd && valIdentifier.Contains(sc.ch)
-			|| (!inExpression && valHotkeyMod.Contains(sc.ch) && sc.chNext != '=')) {
+			if ((!sc.atLineEnd && valIdentifier.Contains(sc.ch))
+			||  (!inExpression && valHotkeyMod.Contains(sc.ch) && sc.chNext != '=')) {
+
+				if (valIdentifier.Contains(sc.ch))
+					validFunction = true;
 
 				if (isdigit(sc.ch))
 					sc.SetState(SCE_AHKL_DECNUMBER);

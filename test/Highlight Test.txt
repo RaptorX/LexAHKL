@@ -408,7 +408,7 @@ Run high realtime between contains in is integer float number digit xdigit alpha
 Run time date not or and topmost top bottom transparent transcolor redraw region id idlast count
 
 ; if you force an expression the parameters should not highlight
-Run % list capacity eject lock unlock label serial type status seconds minutes hours days read parse
+Run list % capacity eject lock unlock label serial type status seconds minutes hours days read parse
 
 abs(logoff close error single shutdown menu exit reload tray add rename check uncheck togglecheck
 abs(enable disable toggleenable default nodefault standard nostandard color delete deleteall icon
@@ -424,7 +424,7 @@ abs(enabled disabled visible notimers interrupt priority waitclose unicode tocod
 abs(yes no ok cancel abort retry ignore force on off all send wanttab monitorcount monitorprimary
 
 ; Parameters ouside functions should not highlight
-abs(monitorname monitorworkarea pid base useunsetlocal useunsetglobal) localsameasglobal
+abs(monitorname) monitorworkarea pid base useunsetlocal useunsetglobal localsameasglobal
 
 /**
  * @Control Flow:
