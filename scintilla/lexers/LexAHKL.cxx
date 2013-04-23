@@ -564,13 +564,22 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 				expLevel += 1;
 				inExpression = true;
+				
+				if (sc.Match(" % "))
+					inCommand = false;
 
 			} else if (sc.ch == ']' || sc.ch == ')') {
 
-				expLevel -= 1;
+				expLevel -= 1, inCommand = false;
+
 				if (expLevel == 0)
 					inExpression = false;
+
 			}
+
+			// Handle Command continuation section
+			if ((OnlySpaces && sc.ch == ',') || (OnlySpaces && sc.Match(')', ',')))
+				inCommand = true;
 
 			if (!sc.atLineEnd && valIdentifier.Contains(sc.ch)
 			|| (!inExpression && valHotkeyMod.Contains(sc.ch) && sc.chNext != '=')) {

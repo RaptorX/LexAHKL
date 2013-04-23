@@ -10,6 +10,24 @@ Versioning:
     ^ Update
 ==================
 
+LexAHKL v0.8.6-15
+Date: Tue Apr 23 22:19:34 2013 +0200
+
+    Changes:
+
+    ! Fix Expressions should end commands
+    ! Fix Comma continuation section continues with command
+
+    Todo:
+
+    + Add Folding
+    + Add Strings to comment doc
+    + Add Line States and context sensitivity
+
+    ! Fix inKey should end command
+    ! Fix Close parenthesis should end command
+    ! Fix Validate identifiers for functions
+
 LexAHKL v0.8.5-14
 Date: Tue Apr 23 21:43:02 2013 +0200
 
@@ -43,27 +61,6 @@ Date: Tue Apr 23 20:51:07 2013 +0200
     + Add Line States and context sensitivity
 
     ! Fix Expression Levels
-    ! Fix Comma continuation section continues with command
-    ! Fix inKey should end command
-    ! Fix Expressions should end commands
-    ! Fix Close parenthesis should end command
-    ! Fix Validate identifiers for functions
-
-LexAHKL v0.8.3-12
-Date: Tue Apr 23 13:43:40 2013 +0200
-
-    Changes:
-
-    ! Fix Expression assignment
-
-    Todo:
-
-    + Add Folding
-    + Add Strings to comment doc
-    + Add Line States and context sensitivity
-
-    ! Fix Expression Levels
-    ! Fix Variable entering to error
     ! Fix Comma continuation section continues with command
     ! Fix inKey should end command
     ! Fix Expressions should end commands
