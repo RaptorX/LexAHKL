@@ -184,8 +184,9 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 	bool inString;
 	bool inCommand;
 	bool inHotstring;
-	bool inExpression;
 	bool inExpString;
+	bool inDocComment;
+	bool inExpression;
 
 	bool inStringBlk = (sc.state == SCE_AHKL_STRINGOPTS || sc.state == SCE_AHKL_STRINGBLOCK || sc.state == SCE_AHKL_STRINGCOMMENT);
 	bool inCommentBlk = (sc.state == SCE_AHKL_COMMENTDOC || sc.state == SCE_AHKL_COMMENTBLOCK);
@@ -200,7 +201,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			mainState = SCE_AHKL_NEUTRAL;
 
 			OnlySpaces = true, validLabel = true, validFunction = true, inKey = false, inString = false;
-			inCommand = false, inHotstring = false, inExpression = false, inExpString = false;
+			inDocComment = false, inCommand = false, inHotstring = false, inExpression = false, inExpString = false;
 
 			if (!inStringBlk && !inCommentBlk)
 				sc.SetState(SCE_AHKL_NEUTRAL);
@@ -369,7 +370,11 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 					sc.Forward(2);
 					sc.SetState(SCE_AHKL_NEUTRAL);
 
-				} else if ((OnlySpaces || isspace(sc.chPrev)) && sc.ch == '@') {
+				} else if ((OnlySpaces || isspace(sc.chPrev)) &&
+					   ((sc.ch == '@' && isalpha(sc.chNext)) || sc.ch == '\'' || sc.ch == '\"' || sc.ch == '`')) {
+
+					if (sc.ch == '\'' || sc.ch == '\"' || sc.ch == '`')
+						inDocComment = true;
 
 					sc.SetState(SCE_AHKL_COMMENTKEYWORD);
 
@@ -378,7 +383,8 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			}
 
 			case SCE_AHKL_COMMENTKEYWORD:	{
-				if (sc.ch == ':')
+				if (sc.atLineEnd || sc.ch == ':'
+				|| (inDocComment && (sc.ch == '@' || sc.ch == '\'' || sc.ch == '\"' || sc.ch == '`')))
 					sc.ForwardSetState(SCE_AHKL_COMMENTDOC);
 			break;
 			}
