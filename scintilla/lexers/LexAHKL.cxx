@@ -676,6 +676,94 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 
 void SCI_METHOD LexerAHKL::Fold(unsigned int startPos, int length, int initStyle, IDocument *pAccess)
 {
+	LexAccessor styler(pAccess);
+
+	int visibleChars = 0;
+	int lineCurrent = styler.GetLine(startPos);
+	int levelCurrent = SC_FOLDLEVELBASE;
+	int styleNext = styler.StyleAt(startPos);
+	int style = initStyle;
+	unsigned int endPos = startPos + length;
+
+	char chNext = styler[startPos];
+
+	bool OnlySpaces = true;
+
+	if (lineCurrent > 0)
+		levelCurrent = styler.LevelAt(lineCurrent-1) >> 16;
+	unsigned int lineStartNext = styler.LineStart(lineCurrent+1);
+	int levelMinCurrent = levelCurrent;
+	int levelNext = levelCurrent;
+
+	for (unsigned int i = startPos; i < endPos; i++) {
+		int stylePrev = style;
+
+		char ch = chNext;
+
+		bool atEOL = i == (lineStartNext-2);
+
+		style = styleNext;
+		chNext = styler.SafeGetCharAt(i + 1);
+		styleNext = styler.StyleAt(i + 1);
+
+		if ((OnlySpaces && ch == '/' && chNext == '*'))
+			levelNext++;
+
+		else if ((OnlySpaces && ch == '*' && chNext == '/'))
+			levelNext--;
+
+		if (style == SCE_AHKL_NEUTRAL) {
+
+			if ((OnlySpaces && ch == '(') || ch == '{') {
+
+				// Measure the minimum before a '{' to allow
+				// folding on "} else {"
+				if (levelMinCurrent > levelNext)
+					levelMinCurrent = levelNext;
+
+				levelNext++;
+
+			} else if ((OnlySpaces && ch == ')') || ch == '}') {
+
+				levelNext--;
+
+			}
+
+		}
+
+		if (!isspace(ch))
+			visibleChars++;
+
+		if (atEOL || (i == endPos-1)) {
+
+			int levelUse = levelCurrent;
+			int lev = levelUse | levelNext << 16;
+
+			if (levelUse < levelNext)
+				lev |= SC_FOLDLEVELHEADERFLAG;
+
+			if (lev != styler.LevelAt(lineCurrent))
+				styler.SetLevel(lineCurrent, lev);
+
+			lineCurrent++;
+			lineStartNext = styler.LineStart(lineCurrent+1);
+			levelCurrent = levelNext;
+			levelMinCurrent = levelCurrent;
+
+			if (atEOL && (i == static_cast<unsigned int>(styler.Length()-1))) 		// There is an empty line at end of file so give it same level and empty
+				styler.SetLevel(lineCurrent, (levelCurrent | levelCurrent << 16) | SC_FOLDLEVELWHITEFLAG);
+
+			visibleChars = 0;
+			OnlySpaces = true;
+
+		}
+
+		if (!isspace(ch))
+			OnlySpaces = false;
+
+
+	}
+
 }
 
 LexerModule lmAHKL(SCLEX_AHKL, LexerAHKL::LexerFactory, "ahkl", ahklWordLists);

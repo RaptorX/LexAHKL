@@ -7,7 +7,7 @@
  * @Homepage         : http://www.autohotkey.com/board/topic/85928-wrapper-scintilla-wrapper-v1424/
  *
  * @Creation Date    : October 29, 2012
- * @Modification Date: April 21, 2013
+ * @Modification Date: April 28, 2013
  *
  * @Description      :
  * -------------------
@@ -508,10 +508,6 @@ true false
  * The following part is for testing folding.
  * =============================================================================================== *
  */
-
-; this is a group of line comments
-; if 3 or more line commnents are together
-; it should be foldable
 
 /*
 comment blocks
