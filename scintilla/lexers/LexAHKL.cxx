@@ -455,7 +455,7 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			}
 
 			case SCE_AHKL_STRINGOPTS:	{
-				if (sc.atLineEnd)
+				if (sc.atLineStart)
 					sc.SetState(SCE_AHKL_STRINGBLOCK);
 			break;
 			}

@@ -10,6 +10,22 @@ Versioning:
     ^ Update
 ==================
 
+LexAHKL v0.10.2-21RC1
+Date: Thu May 2 14:47:28 2013 +0200
+
+    Changes:
+
+    ! Fix String Block options not exiting at line end
+
+    Todo:
+
+    + Add Line States and context sensitivity
+
+    ! Fix Expressions end Commands
+    ! Fix dont start fold if text after fold opener
+    ! Fix continue expression with Commas
+    ! Fix Comma terminate single line expressions
+
 LexAHKL v0.10.1-20
 Date: Thu May 2 13:35:26 2013 +0200
 
@@ -37,15 +53,3 @@ Date: Sun Apr 28 13:14:10 2013 +0200
     + Add Line States and context sensitivity
 
     ! Fix Comma terminate expressions
-
-LexAHKL v0.9.0-18
-Date: Tue Apr 23 23:31:54 2013 +0200
-
-    Changes:
-
-    + Add Strings to comment doc
-
-    Todo:
-
-    + Add Folding
-    + Add Line States and context sensitivity
