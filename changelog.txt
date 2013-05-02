@@ -10,6 +10,20 @@ Versioning:
     ^ Update
 ==================
 
+LexAHKL v0.10.1-20
+Date: Thu May 2 13:35:26 2013 +0200
+
+    Changes:
+
+    ! Fix Documentation Blocks quoted strings highlighting
+
+    Todo:
+
+    + Add Line States and context sensitivity
+
+    ! Fix String Block options not exiting at line end
+    ! Fix Comma terminate expressions
+
 LexAHKL v0.10.0-19
 Date: Sun Apr 28 13:14:10 2013 +0200
 
@@ -34,17 +48,4 @@ Date: Tue Apr 23 23:31:54 2013 +0200
     Todo:
 
     + Add Folding
-    + Add Line States and context sensitivity
-
-LexAHKL v0.8.8-17
-Date: Tue Apr 23 22:53:24 2013 +0200
-
-    Changes:
-
-    ! Fix Validate identifiers for functions'
-
-    Todo:
-
-    + Add Folding
-    + Add Strings to comment doc
     + Add Line States and context sensitivity

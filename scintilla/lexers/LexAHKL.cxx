@@ -51,6 +51,7 @@ class LexerAHKL : public ILexer {
 	CharacterSet valHotkeyMod;
 	CharacterSet valIdentifier;
 	CharacterSet valHotstringOpt;
+	CharacterSet valDocComment;
 
 	WordList directives;
 	WordList commands;
@@ -72,6 +73,7 @@ public:
 	valHotkeyMod(CharacterSet::setDigits, "#!^+&<>*~$"),
 	valIdentifier(CharacterSet::setAlphaNum, "@#$_"),
 	valHotstringOpt(CharacterSet::setDigits, "*?BbCcEeIiKkOoPpRrSsZz"),
+	valDocComment(CharacterSet::setNone, "'`\""),
 	ExpOperator(CharacterSet::setNone, "+-*/!~&|^<>.:"),
 	SynOperator(CharacterSet::setNone, "+-*/!~&|^<>.:()[]?,{}"),
 	EscSequence(CharacterSet::setNone, ",%`;nrbtvaf") {
@@ -371,9 +373,9 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 					sc.SetState(SCE_AHKL_NEUTRAL);
 
 				} else if ((OnlySpaces || isspace(sc.chPrev)) &&
-					   ((sc.ch == '@' && isalpha(sc.chNext)) || sc.ch == '\'' || sc.ch == '\"' || sc.ch == '`')) {
+					   ((sc.ch == '@' && isalnum(sc.chNext)) || valDocComment.Contains(sc.ch))) {
 
-					if (sc.ch == '\'' || sc.ch == '\"' || sc.ch == '`')
+					if (valDocComment.Contains(sc.ch))
 						inDocComment = true;
 
 					sc.SetState(SCE_AHKL_COMMENTKEYWORD);
@@ -383,8 +385,8 @@ void SCI_METHOD LexerAHKL::Lex(unsigned int startPos, int length, int initStyle,
 			}
 
 			case SCE_AHKL_COMMENTKEYWORD:	{
-				if (sc.atLineEnd || sc.ch == ':'
-				|| (inDocComment && (sc.ch == '@' || sc.ch == '\'' || sc.ch == '\"' || sc.ch == '`')))
+				if (sc.atLineStart || (!inDocComment && sc.ch == ':')
+				|| (inDocComment && valDocComment.Contains(sc.ch)))
 					sc.ForwardSetState(SCE_AHKL_COMMENTDOC);
 			break;
 			}

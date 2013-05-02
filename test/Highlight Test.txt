@@ -15,9 +15,16 @@
  * There are some features added to this lexer which are not part of the autohotkey language but
  * because they are useful and dont interfere with the script I added them.
  *
- * One such examples is the @[keyword]: secuence in which any word preceded by an [At] Symbol
- * and Followed by a [colon] symbol inside a documentation comment block will be highlighted.
- * Useful when adding titles as shown above.
+ * One such examples is the @[keyword]: secuence in which any alphanumeric word preceded by an '@' 
+ * and Followed by a ':' inside a documentation comment block will be highlighted. Useful when 
+ * adding titles as shown above.
+ *
+ * As you might have noticed, quoted strings will also be highlighted.
+ * The current quote symbols are: `1` '2' "3".
+ *
+ * If you dont want this kind of highlighting consider using the normal comment blocks by putting
+ * exactly one asterisk at the beginning of the comment block or more than one as shown below.
+ * 
  * =============================================================================================== *
  */
 
@@ -126,13 +133,11 @@
     ) Nothing else allowed here ; except for comments and paths
 
     FileAppend,
-    (% ` Com
+    ( % ` Com
 
-        another block of text but this time with some options
-	in this example ; this IS a comment
-	`t `n `t these escape sequences are literal now!
-	and this percent sign %variable% is not a variable reference anymore!!
-
+        another block of text but 
+	this time with some options
+	
     ), c:\this is allowed.txt
 
 /**
