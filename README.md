@@ -1,9 +1,51 @@
 ***
 
-Autohotkey L lexer
+Autohotkey L Lexer
 ------------------------
 
-This Lexer has been written from scratch to match Autohotkey syntax as much as possible.
+This is a Lexer for autohotkey L that has been written from scratch 
+to match Autohotkeys syntax as much as possible.
+
+Features
+------------------------
+
+1. All bugs found in the previous versions of AHK Lexers have been fixed
+2. Folding
+3. More accurate reproduction of Autohotkey syntax
+4. Lexing of Object Syntax
+5. Intelligent highlighting of Special Command Parameters
+6. Two user defined keyword lists available
+7. Extremely customizable coloring. You can change the following colors to the lexer:
+	* Documentation Comments (See test file for information of what this is)
+	* Line Comments
+	* Block Comments
+	* Strings
+	* String Block
+	* String Block Options
+	* String Block Line Comments
+	* Directives
+	* Commands
+	* Special Command Parameters
+	* Control Flow Keywords (if, else, break, continue and so on)
+	* Keyboard/Mouse Keys
+	* Labels
+	* Hotkeys
+	* Hotstrings
+	* Hotstring Options
+	* Decimal Numbers
+	* Hexadecimal Numbers
+	* User Created Variables
+	* Builtin Variables
+	* Variable References (in expressions)
+	* Objects
+	* User Functions
+	* Builtin Functions
+	* Escape Sequences
+	* Two user defined keyword lists <-- you can highlight custom words if you want 
+
+As you can see this Lexer is extremely customizable so i will make a few notes on that.
+
+If you dont want to color a few things then just dont assign any color to them. Also a few things might look like 'duplicates' but they arent. I made it like that to give the programmer all the flexibility you need for making things your way. While you might prefer the line comments and the string block comments to look the same way there are other people who might not want that.
 
 License:
 ------------------------

@@ -10,6 +10,25 @@ Versioning:
     ^ Update
 ==================
 
+LexAHKL v0.10.3-22RC2
+Date: Wed May 22 02:42:46 2013 +0200
+
+    Changes:
+
+    + Add Scintilla.iface definitions for all other lexers
+
+    ^ Update README file
+
+    Todo:
+
+    + Add Line States and context sensitivity
+    + Add Highlighting of forced expression operator
+
+    ! Fix Expressions end Commands
+    ! Fix dont start fold if text after fold opener
+    ! Fix continue expression with Commas
+    ! Fix Comma terminate single line expressions
+
 LexAHKL v0.10.2-21RC1
 Date: Thu May 2 14:47:28 2013 +0200
 
@@ -38,18 +57,4 @@ Date: Thu May 2 13:35:26 2013 +0200
     + Add Line States and context sensitivity
 
     ! Fix String Block options not exiting at line end
-    ! Fix Comma terminate expressions
-
-LexAHKL v0.10.0-19
-Date: Sun Apr 28 13:14:10 2013 +0200
-
-    Changes:
-
-    + Add Folding
-
-    Todo:
-
-    + Add String block conditional lexing
-    + Add Line States and context sensitivity
-
     ! Fix Comma terminate expressions
