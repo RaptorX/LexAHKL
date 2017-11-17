@@ -8,6 +8,7 @@
  *
  * @Creation Date    : October 29, 2012
  * @Modification Date: April 28, 2013
+ * @Modification Date: Feb 20, 2017  (mmikeww on github - some extra changes)
  *
  * @Description      :
  * -------------------
@@ -31,6 +32,8 @@
 ; this is a line comment
 
 	; empty spaces dont matter
+
+MsgBox, blah blah `; not a comment;not another comment ; this is a comment
 
 /**
  *
@@ -114,14 +117,32 @@
 
     Function(byref param1, param2.hwnd, param3.method(), 4, "text 5")
 
+    WinActivate, ahk_class One ahk_id Two ahk_pid Three ahk_exe Four ahk_group Five
+    WinActivate, % "ahk_class One ahk_id Two ahk_pid Three ahk_exe Four ahk_group Five"
+
     var[12] := var + 5 func("Test")
-    sci["new"] = test
-    sci.add()
-    sci.status = 1
+
+    try
+       sci["new"] = test
+    catch
+       sci.add()
+    finally
+       sci.status = 1
 
     if var = text
+      var := Func("Function")
 
     if (myvar = "remember that this is an expression here" %varref% 5+5)
+
+    for k,v in obj
+      MsgBox, %A_AhkVersion%
+
+    obj := new baseObject
+
+    class baseObject {
+        static foo := "bar"
+        this.baz := 0
+    }
 
     var =
     (
@@ -145,22 +166,33 @@
  *
  */ ^Enter::Send test
     #Backspace::Msgbox True
+#v::Msgbox, unindented hotkey
+;F2::F3 ; commented out hotkey
     !+NumpadEnter::var += var
     ~$a::Msgbox % test + 5
+~LButton Up::msgbox, hi
+    ;F1::Msgbox, this hotkey line is commented out too
+    MsgBox, bbah::asdfsa   ; shouldn't be a hotkey
 
 /**
  * @Hotstrings:
  *
  */ ::btw::by the way
     :*?B0C1K5OP5RSISPSEZ:options::these are all acceptable options
+::afk::unindented hotstring
+;::yolo::commented hotstring
+    :*B0SE:test::TEST
     :ADFG:invOptions::these are invalid options
     :RAk5FeSIG*:MixOptions::and here is how it looks with some mixed options
+    ;::cmnt::this hotstring line is commented out too
 
 /**
  * @Escape Sequences:
  * Only characters that have a special meaning will be highlighted as an escape sequence.
  *
- */ `, `% `` `; `n `r `b `t `v `a `f `s `i `]
+ */ `, `% `` `; `n `r `b `t `v `a `f   ; these are valid escape chars
+    
+    `s `i `]                           ; these are not valid and have no special meaning
 
 
 
@@ -182,11 +214,38 @@
  *
  */
 
-#allowsamelinecomments #clipboardtimeout #commentflag #errorstdout #escapechar #hotkeyinterval
-#hotkeymodifiertimeout #hotstring #if #iftimeout #ifwinactive #ifwinexist #include #includeagain
-#installkeybdhook #installmousehook #keyhistory #ltrim #maxhotkeysperinterval #maxmem #maxthreads
-#maxthreadsbuffer #maxthreadsperhotkey #menumaskkey #noenv #notrayicon #persistent #singleinstance
-#usehook #warn #winactivateforce
+#allowsamelinecomments
+#clipboardtimeout
+#commentflag
+#errorstdout
+#escapechar
+#hotkeyinterval
+#hotkeymodifiertimeout
+#hotstring
+#if 
+#iftimeout 
+#ifwinactive 
+#ifwinexist 
+#include 
+#includeagain
+#inputlevel
+#installkeybdhook 
+#installmousehook 
+#keyhistory 
+#ltrim 
+#maxhotkeysperinterval 
+#maxmem 
+#maxthreads
+#maxthreadsbuffer 
+#maxthreadsperhotkey 
+#menumaskkey 
+#noenv 
+#notrayicon 
+#persistent 
+#singleinstance
+#usehook 
+#warn 
+#winactivateforce
 
 /**
  * @Commands:
@@ -481,6 +540,10 @@ a_thishotkey a_thismenu a_thismenuitem a_thismenuitempos a_tickcount a_timeidle 
 a_timesincepriorhotkey a_timesincethishotkey a_titlematchmode a_titlematchmodespeed a_username
 a_wday a_windelay a_windir a_workingdir a_yday a_year a_yweek a_yyyy clipboard clipboardall comspec
 programfiles a_thisfunc a_thislabel a_ispaused a_iscritical a_isunicode a_ptrsize errorlevel
+a_screendpi a_is64bitos a_priorkey a_defaultgui a_defaultlistview a_defaulttreeview
+a_fileencoding a_sendmode a_sendlevel a_storecapslockmode a_keydelayduration a_keydelayplay
+a_keydelayplayduration a_mousedelayplay a_regview a_scripthwnd
+a_coordmodemenu a_coordmodecaret a_coordmodemouse a_coordmodepixel a_coordmodetooltip
 true false
 
 /**
